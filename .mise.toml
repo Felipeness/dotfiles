@@ -1,0 +1,10 @@
+# Mise Global Configuration
+# https://mise.jdx.dev/
+
+[tools]
+node = "22"
+python = "3.13"
+helmfile = "latest"
+
+[settings]
+experimental = true

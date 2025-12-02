@@ -1,0 +1,20 @@
+# Arquivos temporários
+*.tmp
+*.temp
+*.log
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos de backup
+*.bak
+*~
+
+# Secrets (nunca commitar)
+.env
+.env.*
+*.pem
+*.key
+credentials.json
