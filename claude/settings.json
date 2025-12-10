@@ -1,0 +1,21 @@
+{
+  "includeCoAuthoredBy": false,
+  "alwaysThinkingEnabled": true,
+  "includeLineNumbers": true,
+  "autoSave": true,
+  "preferShorterResponses": false,
+  "includeFileContext": true,
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File $env:USERPROFILE\\.claude\\play-notification.ps1"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -6,7 +6,7 @@ Configurações e scripts para setup rápido de ambiente de desenvolvimento Wind
 
 ```powershell
 # 1. Clone o repositório
-git clone https://github.com/SEU_USUARIO/dotfiles.git $HOME\dotfiles
+git clone https://github.com/Felipeness/dotfiles.git $HOME\dotfiles
 
 # 2. Execute o instalador (como Admin)
 Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -53,7 +53,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 ### Fonte
 
-- **Maple Mono NF** - Nerd Font para desenvolvimento
+- **Maple Mono NF** - Nerd Font para desenvolvimento (configurada automaticamente no Windows Terminal)
 
 ## Estrutura
 
@@ -65,6 +65,28 @@ dotfiles/
 │   └── Microsoft.PowerShell_profile.ps1
 ├── starship/
 │   └── starship.toml
+├── claude/                  # Configurações do Claude Code
+│   ├── settings.json
+│   ├── CLAUDE.md
+│   ├── CLAUDE-expanded.md
+│   ├── play-notification.ps1
+│   ├── commands/
+│   │   ├── new-feat.md
+│   │   ├── review.md
+│   │   └── open-pr.md
+│   ├── skills/
+│   │   ├── coding-guidelines/
+│   │   ├── copywriting/
+│   │   ├── planning/
+│   │   ├── review-changes/
+│   │   └── writing/
+│   └── songs/
+│       └── duolingo-correct.mp3
+├── tmux/
+│   └── .tmux.conf           # Config do Tmux para WSL
+├── scripts/
+│   ├── claude-workspace.bat # Abre 4 painéis no Windows Terminal
+│   └── claude-workspace.sh  # Abre 4 painéis no Tmux (WSL)
 └── README.md
 ```
 
@@ -87,19 +109,91 @@ dotfiles/
 .\install.ps1 -SkipFonts -SkipApps
 ```
 
+## Claude Code
+
+O instalador configura automaticamente o Claude Code com:
+
+### Settings
+- `alwaysThinkingEnabled: true`
+- `includeLineNumbers: true`
+- `autoSave: true`
+- Hook de notificação (som Duolingo ao completar tarefas)
+
+### Slash Commands
+
+| Comando | Descrição |
+|---------|-----------|
+| `/new-feat [desc]` | Cria branch + desenvolve feature |
+| `/review` | Revisa código (type safety, OWASP, a11y) |
+| `/open-pr [título]` | Cria PR com summary e test plan |
+
+### Skills
+
+| Skill | Descrição |
+|-------|-----------|
+| `coding-guidelines` | Padrões TypeScript/React |
+| `planning` | Arquitetura e decisões |
+| `review-changes` | Code review |
+| `writing` | Documentação e commits |
+| `copywriting` | Marketing e sales copy |
+
+### MCPs Instalados
+
+| MCP | Descrição |
+|-----|-----------|
+| Context7 | Busca docs atualizadas de libs |
+| Playwright | Automação de browser/testes E2E |
+
+## Tmux (WSL)
+
+Configuração otimizada para uso com Claude Code.
+
+### Atalhos
+
+| Atalho | Ação |
+|--------|------|
+| `Ctrl+a` | Prefixo (em vez de Ctrl+b) |
+| `Ctrl+a \|` | Split vertical |
+| `Ctrl+a -` | Split horizontal |
+| `Alt+Setas` | Navegar entre painéis |
+| `Ctrl+a z` | Zoom no painel atual |
+| `Ctrl+a d` | Desconectar (sessão continua) |
+| `Ctrl+a r` | Recarregar config |
+
+### Scripts de Workspace
+
+```bash
+# Windows Terminal - abre 4 painéis
+claude-workspace.bat
+
+# WSL/Tmux - abre 4 painéis
+~/claude-workspace.sh
+
+# Com projetos específicos
+~/claude-workspace.sh ~/proj1 ~/proj2 ~/proj3 ~/proj4
+
+# Reconectar sessão tmux
+tmux attach -t claude
+```
+
 ## Após a Instalação
 
 1. **Reinicie o terminal**
 
-2. **Configure a fonte no Windows Terminal:**
-   - Settings → Profiles → Defaults → Appearance → Font face → `Maple Mono NF`
-
-3. **Verifique as instalações:**
+2. **Verifique as instalações:**
    ```powershell
    mise doctor
    starship --version
-   fzf --version
-   zoxide --version
+   claude --version
+   ```
+
+3. **Teste o workspace:**
+   ```powershell
+   # Windows
+   .\scripts\claude-workspace.bat
+
+   # WSL
+   ~/claude-workspace.sh
    ```
 
 ## Aliases Configurados
@@ -138,5 +232,6 @@ cargo install-update -a
 
 - [mise Documentation](https://mise.jdx.dev/)
 - [Starship Presets](https://starship.rs/presets/)
-- [Dracula Theme](https://draculatheme.com/)
 - [Maple Font](https://github.com/subframe7536/Maple-font)
+- [Claude Code Guide](https://docs.anthropic.com/en/docs/claude-code)
+- [Tmux Cheat Sheet](https://tmuxcheatsheet.com/)

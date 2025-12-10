@@ -197,6 +197,158 @@ if (Test-Path $sourceStarship) {
 }
 
 # ============================================
+# 8. CONFIGURAR CLAUDE CODE
+# ============================================
+Write-Step "Configurando Claude Code..."
+
+$claudeDir = "$env:USERPROFILE\.claude"
+if (-not (Test-Path $claudeDir)) {
+    New-Item -ItemType Directory -Force -Path $claudeDir | Out-Null
+}
+
+$sourceClaudeDir = Join-Path $scriptDir "claude"
+if (Test-Path $sourceClaudeDir) {
+    # Copiar settings.json
+    $sourceSettings = Join-Path $sourceClaudeDir "settings.json"
+    if (Test-Path $sourceSettings) {
+        Copy-Item -Path $sourceSettings -Destination "$claudeDir\settings.json" -Force
+        Write-Success "Claude settings.json copiado"
+    }
+
+    # Copiar CLAUDE.md
+    $sourceClaude = Join-Path $sourceClaudeDir "CLAUDE.md"
+    if (Test-Path $sourceClaude) {
+        Copy-Item -Path $sourceClaude -Destination "$claudeDir\CLAUDE.md" -Force
+        Write-Success "CLAUDE.md copiado"
+    }
+
+    # Copiar CLAUDE-expanded.md
+    $sourceClaudeExp = Join-Path $sourceClaudeDir "CLAUDE-expanded.md"
+    if (Test-Path $sourceClaudeExp) {
+        Copy-Item -Path $sourceClaudeExp -Destination "$claudeDir\CLAUDE-expanded.md" -Force
+        Write-Success "CLAUDE-expanded.md copiado"
+    }
+
+    # Copiar play-notification.ps1
+    $sourceNotification = Join-Path $sourceClaudeDir "play-notification.ps1"
+    if (Test-Path $sourceNotification) {
+        Copy-Item -Path $sourceNotification -Destination "$claudeDir\play-notification.ps1" -Force
+        Write-Success "play-notification.ps1 copiado"
+    }
+
+    # Copiar commands
+    $sourceCommands = Join-Path $sourceClaudeDir "commands"
+    if (Test-Path $sourceCommands) {
+        Copy-Item -Path $sourceCommands -Destination "$claudeDir\commands" -Recurse -Force
+        Write-Success "Claude commands copiados"
+    }
+
+    # Copiar skills
+    $sourceSkills = Join-Path $sourceClaudeDir "skills"
+    if (Test-Path $sourceSkills) {
+        Copy-Item -Path $sourceSkills -Destination "$claudeDir\skills" -Recurse -Force
+        Write-Success "Claude skills copiadas"
+    }
+
+    # Copiar songs
+    $sourceSongs = Join-Path $sourceClaudeDir "songs"
+    if (Test-Path $sourceSongs) {
+        Copy-Item -Path $sourceSongs -Destination "$claudeDir\songs" -Recurse -Force
+        Write-Success "Claude songs copiados"
+    }
+} else {
+    Write-Warning "Pasta claude não encontrada em $sourceClaudeDir"
+}
+
+# ============================================
+# 9. CONFIGURAR TMUX (WSL)
+# ============================================
+Write-Step "Configurando Tmux para WSL..."
+
+$sourceTmux = Join-Path $scriptDir "tmux\.tmux.conf"
+if (Test-Path $sourceTmux) {
+    # Copia para WSL home
+    wsl -e bash -c "cp '/mnt/c/Users/$env:USERNAME/dotfiles/tmux/.tmux.conf' ~/.tmux.conf 2>/dev/null"
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "Tmux config copiado para WSL"
+    } else {
+        Write-Warning "WSL não disponível ou erro ao copiar"
+    }
+} else {
+    Write-Warning "Arquivo .tmux.conf não encontrado"
+}
+
+# ============================================
+# 10. COPIAR SCRIPTS DE WORKSPACE
+# ============================================
+Write-Step "Copiando scripts de workspace..."
+
+$sourceScripts = Join-Path $scriptDir "scripts"
+$destScripts = "$env:USERPROFILE\scripts"
+
+if (-not (Test-Path $destScripts)) {
+    New-Item -ItemType Directory -Force -Path $destScripts | Out-Null
+}
+
+if (Test-Path $sourceScripts) {
+    Copy-Item -Path "$sourceScripts\*" -Destination $destScripts -Recurse -Force
+    Write-Success "Scripts copiados para $destScripts"
+
+    # Copiar script WSL para home
+    wsl -e bash -c "cp '/mnt/c/Users/$env:USERNAME/scripts/claude-workspace.sh' ~/claude-workspace.sh && chmod +x ~/claude-workspace.sh 2>/dev/null"
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "claude-workspace.sh copiado para WSL"
+    }
+}
+
+# ============================================
+# 11. CONFIGURAR FONTE NO WINDOWS TERMINAL
+# ============================================
+Write-Step "Configurando fonte Maple Mono NF no Windows Terminal..."
+
+$wtSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+
+if (Test-Path $wtSettingsPath) {
+    $wtSettings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
+
+    # Configurar fonte padrão para todos os perfis
+    if (-not $wtSettings.profiles.defaults) {
+        $wtSettings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
+    }
+
+    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{
+        face = "Maple Mono NF"
+        size = 12
+    } -Force
+
+    $wtSettings | ConvertTo-Json -Depth 100 | Set-Content $wtSettingsPath -Encoding UTF8
+    Write-Success "Fonte Maple Mono NF configurada no Windows Terminal"
+} else {
+    Write-Warning "Windows Terminal settings.json não encontrado"
+}
+
+# ============================================
+# 12. INSTALAR MCPs DO CLAUDE CODE
+# ============================================
+Write-Step "Instalando MCPs do Claude Code..."
+
+# Refresh PATH
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+$claudeCmd = Get-Command claude -ErrorAction SilentlyContinue
+if ($claudeCmd) {
+    Write-Host "  Instalando Context7 MCP..." -NoNewline
+    claude mcp add context7 -- npx -y "@upstash/context7-mcp@latest" 2>&1 | Out-Null
+    Write-Success " OK"
+
+    Write-Host "  Instalando Playwright MCP..." -NoNewline
+    claude mcp add playwright -- npx "@playwright/mcp@latest" 2>&1 | Out-Null
+    Write-Success " OK"
+} else {
+    Write-Warning "Claude Code CLI não encontrado. Instale com: npm install -g @anthropic-ai/claude-code"
+}
+
+# ============================================
 # FINALIZAÇÃO
 # ============================================
 Write-Host @"
@@ -207,13 +359,26 @@ Write-Host @"
 
 Próximos passos:
   1. Reinicie o terminal
-  2. Configure a fonte 'Maple Mono NF' no seu terminal
-  3. Rode 'mise doctor' para verificar a instalação
+  2. Rode 'mise doctor' para verificar a instalação
+  3. Execute 'claude-workspace.bat' para abrir 4 painéis
 
 Ferramentas instaladas:
   - mise, starship, fzf, zoxide, xh
   - helm, pack, helmfile
   - docker, gh, cargo
   - tailspin (tspin)
+
+Claude Code configurado:
+  - Settings, CLAUDE.md, commands, skills
+  - MCPs: Context7, Playwright
+  - Hook de notificação (som Duolingo)
+  - Scripts: claude-workspace.bat/.sh
+
+Tmux (WSL):
+  - Config em ~/.tmux.conf
+  - Script ~/claude-workspace.sh
+
+Fonte:
+  - Maple Mono NF configurada no Windows Terminal
 
 "@ -ForegroundColor Green
