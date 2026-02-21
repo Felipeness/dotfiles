@@ -2,51 +2,54 @@
 
 > Ambiente de desenvolvimento completo — setup em um comando.
 
-## Instalação
-
 ```bash
 git clone git@github.com:Felipeness/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-chmod +x install.sh
-./install.sh
+cd ~/dotfiles && chmod +x install.sh && ./install.sh
 ```
 
-## O que é instalado
+---
 
-### Shell
+## Stack
+
+### Shell & Terminal
 | Ferramenta | Descrição |
 |---|---|
-| ZSH | Shell principal |
-| Oh My Zsh | Framework de plugins |
-| Powerlevel10k | Tema do prompt |
+| **Ghostty** | Terminal moderno e rápido |
+| **ZSH** | Shell principal |
+| **Oh My Zsh** | Framework de plugins |
+| **Powerlevel10k** | Tema do prompt |
+| **Maple Mono NF** | Fonte principal (Nerd Font) |
+| **JetBrains Mono** | Fonte fallback |
+| **Ultra Dark** | Tema do terminal |
+
+### Plugins ZSH
+| Plugin | Descrição |
+|---|---|
 | zsh-autosuggestions | Sugestões baseadas no histórico |
 | zsh-syntax-highlighting | Syntax highlight no terminal |
 | fzf + fzf-tab | Busca fuzzy com preview no Tab |
-| zoxide | `cd` inteligente com histórico |
+| zoxide | `cd` inteligente |
 | bat | `cat` com syntax highlight |
 | eza | `ls` com ícones e Git status |
-
-### Terminal
-| Ferramenta | Descrição |
-|---|---|
-| Ghostty | Terminal moderno e rápido |
-| Maple Mono NF | Fonte principal (Nerd Font) |
-| JetBrains Mono | Fonte fallback |
-| Ultra Dark | Tema do terminal |
+| history-substring-search | Setas ↑↓ buscam no histórico |
+| sudo | `ESC ESC` adiciona sudo |
+| extract | `x arquivo` extrai qualquer formato |
+| colored-man-pages | `man` colorido |
 
 ### Editor
 | Ferramenta | Descrição |
 |---|---|
-| Cursor IDE | Editor principal (fork do VS Code com IA) |
-| Tokyo Night | Tema do editor |
+| **Cursor IDE** | Editor principal (VS Code + IA) |
+| **Tokyo Night** | Tema principal |
+| **Dracula / Dracula At Night** | Temas alternativos |
 | ESLint + Prettier | Linting e formatação |
-| GitLens | Git avançado |
-| Error Lens | Erros inline |
+| GitLens | Git avançado inline |
+| Error Lens | Erros inline no código |
+| Thunder Client | Testes de API |
 | Tailwind CSS | IntelliSense |
 | Prisma | ORM IntelliSense |
-| Thunder Client | Testes de API |
 
-### Linguagens e Runtimes
+### Linguagens & Runtimes
 | Ferramenta | Versão |
 |---|---|
 | Node.js | v22 |
@@ -54,23 +57,6 @@ chmod +x install.sh
 | Go | v1.24 |
 | Python | v3.12 |
 | TypeScript | v5.9 |
-
-### Bancos de Dados
-| Ferramenta | Versão |
-|---|---|
-| PostgreSQL | 16 |
-| Redis | 7 |
-| MongoDB | 8 |
-
-### DevOps / Infra
-| Ferramenta | Descrição |
-|---|---|
-| Docker + Docker Desktop | Containers |
-| kubectl | CLI do Kubernetes |
-| Helm | Package manager do K8s |
-| k9s | TUI para Kubernetes |
-| minikube | Kubernetes local |
-| Temporal CLI | Workflow orchestration |
 
 ### Ferramentas Go
 | Ferramenta | Descrição |
@@ -80,48 +66,76 @@ chmod +x install.sh
 | goimports | Formata imports |
 | golangci-lint | Linter |
 
+### Bancos de Dados
+| Ferramenta | Versão |
+|---|---|
+| PostgreSQL | 16 |
+| Redis | 7 |
+| MongoDB | 8 |
+
+### DevOps & Infra
+| Ferramenta | Descrição |
+|---|---|
+| Docker + Docker Desktop | Containers |
+| kubectl v1.32 | CLI do Kubernetes |
+| Helm v3 | Package manager K8s |
+| k9s | TUI para Kubernetes |
+| minikube | Kubernetes local |
+| Terraform v1.14 | Infrastructure as Code |
+| Ansible | Automação de configuração |
+| Temporal CLI | Workflow orchestration |
+
+---
+
 ## Estrutura
 
 ```
 dotfiles/
-├── install.sh          # Script de instalação completo
+├── install.sh              # Script completo e idempotente
 ├── zsh/
-│   ├── .zshrc          # Config do ZSH + aliases
-│   └── .p10k.zsh       # Config do Powerlevel10k
+│   ├── .zshrc              # Config ZSH + aliases + plugins
+│   └── .p10k.zsh           # Config Powerlevel10k
 ├── ghostty/
-│   └── config          # Config do terminal Ghostty
+│   └── config              # Config Ghostty
 ├── cursor/
-│   └── settings.json   # Settings do Cursor IDE
+│   ├── settings.json       # Settings Cursor IDE
+│   └── extensions.txt      # Lista de extensões
 └── git/
-    └── .gitconfig      # Config global do Git
+    └── .gitconfig          # Config global Git
 ```
 
-## Aliases úteis
+---
+
+## Aliases
 
 ```zsh
 # Navegação
-ll    → eza -lah --icons --git
-tree  → eza --tree --icons
-cd    → zoxide (inteligente)
-cat   → bat (com syntax highlight)
+ll      → eza -lah --icons --git
+ls      → eza --icons
+tree    → eza --tree --icons
+cat     → bat (syntax highlight)
+cd      → zoxide (inteligente)
+..      → cd ..
+...     → cd ../..
 
 # Git
-gs    → git status
-ga    → git add
-gc    → git commit
-gp    → git push
-gl    → git pull
-glog  → git log --oneline --graph --decorate
+gs      → git status
+ga      → git add
+gc      → git commit
+gp      → git push
+gl      → git pull
+glog    → git log --oneline --graph --decorate
 
 # Dev
-ni    → npm install
-bi    → bun install
-dev   → bun run dev
+ni      → npm install
+bi      → bun install
+dev     → bun run dev
+build   → bun run build
 
 # Docker
-dps   → docker ps
-dcu   → docker compose up -d
-dcd   → docker compose down
+dps     → docker ps
+dcu     → docker compose up -d
+dcd     → docker compose down
 ```
 
 ## Atalhos Ghostty
@@ -130,7 +144,18 @@ dcd   → docker compose down
 |---|---|
 | `Ctrl+Shift+D` | Split vertical |
 | `Ctrl+Shift+E` | Split horizontal |
-| `Ctrl+Shift+H/L` | Navegar esquerda/direita |
-| `Ctrl+Shift+K/J` | Navegar cima/baixo |
+| `Ctrl+Shift+H` / `L` | Navegar esquerda / direita |
+| `Ctrl+Shift+K` / `J` | Navegar cima / baixo |
 | `Ctrl+Shift+Z` | Zoom no split atual |
 | `Ctrl+Shift+W` | Fechar split |
+
+## ZSH shortcuts
+
+| Atalho | Ação |
+|---|---|
+| `ESC ESC` | Adiciona `sudo` ao comando anterior |
+| `Ctrl+T` | Busca fuzzy de arquivos |
+| `Tab` | Autocomplete com preview (fzf-tab) |
+| `↑` / `↓` | Busca no histórico pelo que foi digitado |
+| `Alt+←` / `→` | Navega histórico de diretórios |
+| `x arquivo` | Extrai qualquer arquivo compactado |

@@ -1,0 +1,53 @@
+# Cursor IDE Extensions
+# Instaladas automaticamente pelo install.sh
+
+# Temas
+enkia.tokyo-night
+dracula-theme.theme-dracula
+bceskavich.theme-dracula-at-night
+
+# Ícones
+pkief.material-icon-theme
+
+# Linting e Formatação
+dbaeumer.vscode-eslint
+esbenp.prettier-vscode
+
+# Git
+eamodio.gitlens
+fabiospampinato.vscode-highlight
+
+# TypeScript / JavaScript
+formulahendry.auto-rename-tag
+christian-kohler.path-intellisense
+usernamehw.errorlens
+
+# CSS / Tailwind
+bradlc.vscode-tailwindcss
+
+# Banco de Dados / ORM
+prisma.prisma
+mongodb.mongodb-vscode
+
+# Docker / Kubernetes
+ms-azuretools.vscode-docker
+ms-azuretools.vscode-containers
+ms-kubernetes-tools.vscode-kubernetes-tools
+redhat.vscode-yaml
+
+# Go
+golang.go
+
+# Infraestrutura
+hashicorp.terraform
+
+# Qualidade de Código
+aaron-bond.better-comments
+streetsidesoftware.code-spell-checker
+streetsidesoftware.code-spell-checker-portuguese-brazilian
+
+# API
+rangav.vscode-thunder-client
+
+# Env
+mikestead.dotenv
