@@ -1,12 +1,12 @@
 #Requires -RunAsAdministrator
 <#
 .SYNOPSIS
-    Script de instalação automatizada de ferramentas de desenvolvimento
+    Script de instalacao automatizada de ferramentas de desenvolvimento
 .DESCRIPTION
-    Instala todas as ferramentas CLI, fontes e configurações para ambiente de desenvolvimento
+    Instala todas as ferramentas CLI, fontes e configuracoes para ambiente de desenvolvimento
 .NOTES
     Autor: Felipe
-    Versão: 1.0.0
+    Versao: 2.0.0 (Abril 2026)
 #>
 
 param(
@@ -32,8 +32,11 @@ Write-Host @"
 |____/ \___/ \__|_| |_|_|\___||___/
 
   Instalador de Ambiente de Desenvolvimento
+  v2.0.0 - Abril 2026
 
 "@ -ForegroundColor Magenta
+
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 # ============================================
 # 1. FERRAMENTAS CLI VIA WINGET
@@ -55,7 +58,7 @@ $wingetPackages = @(
 foreach ($pkg in $wingetPackages) {
     Write-Host "  Instalando $($pkg.name)..." -NoNewline
     $result = winget install $pkg.id --accept-source-agreements --accept-package-agreements --silent 2>&1
-    if ($LASTEXITCODE -eq 0 -or $result -match "já instalado") {
+    if ($LASTEXITCODE -eq 0 -or $result -match "ja instalado") {
         Write-Success " OK"
     } else {
         Write-Warning " Verificar manualmente"
@@ -90,7 +93,7 @@ if (-not $SkipApps) {
 # 3. VS BUILD TOOLS + RUST PACKAGES
 # ============================================
 if (-not $SkipRust) {
-    Write-Step "Instalando VS Build Tools (necessário para cargo)..."
+    Write-Step "Instalando VS Build Tools (necessario para cargo)..."
     winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --quiet --wait" --accept-source-agreements --accept-package-agreements 2>&1 | Out-Null
 
     Write-Step "Instalando pacotes Rust via cargo..."
@@ -170,14 +173,13 @@ if (-not (Test-Path $profileDir)) {
     New-Item -ItemType Directory -Force -Path $profileDir | Out-Null
 }
 
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sourceProfile = Join-Path $scriptDir "powershell\Microsoft.PowerShell_profile.ps1"
 
 if (Test-Path $sourceProfile) {
     Copy-Item -Path $sourceProfile -Destination $PROFILE -Force
     Write-Success "Profile copiado para $PROFILE"
 } else {
-    Write-Warning "Arquivo de profile não encontrado em $sourceProfile"
+    Write-Warning "Arquivo de profile nao encontrado em $sourceProfile"
 }
 
 # ============================================
@@ -194,6 +196,32 @@ $sourceStarship = Join-Path $scriptDir "starship\starship.toml"
 if (Test-Path $sourceStarship) {
     Copy-Item -Path $sourceStarship -Destination "$starshipDir\starship.toml" -Force
     Write-Success "Starship config copiado"
+}
+
+# ============================================
+# 7a. CONFIGURAR GIT (.gitconfig)
+# ============================================
+Write-Step "Configurando Git..."
+
+$sourceGitConfig = Join-Path $scriptDir "git\.gitconfig"
+if (Test-Path $sourceGitConfig) {
+    Copy-Item -Path $sourceGitConfig -Destination "$env:USERPROFILE\.gitconfig" -Force
+    Write-Success "Git config copiado"
+} else {
+    Write-Warning ".gitconfig nao encontrado em $sourceGitConfig"
+}
+
+# ============================================
+# 7b. CONFIGURAR BASH (.bashrc)
+# ============================================
+Write-Step "Configurando Bash..."
+
+$sourceBashrc = Join-Path $scriptDir "bash\.bashrc"
+if (Test-Path $sourceBashrc) {
+    Copy-Item -Path $sourceBashrc -Destination "$env:USERPROFILE\.bashrc" -Force
+    Write-Success ".bashrc copiado"
+} else {
+    Write-Warning ".bashrc nao encontrado em $sourceBashrc"
 }
 
 # ============================================
@@ -236,6 +264,31 @@ if (Test-Path $sourceClaudeDir) {
         Write-Success "play-notification.ps1 copiado"
     }
 
+    # Copiar settings.local.json.template (como referencia)
+    $sourceLocalTemplate = Join-Path $sourceClaudeDir "settings.local.json.template"
+    if (Test-Path $sourceLocalTemplate) {
+        Copy-Item -Path $sourceLocalTemplate -Destination "$claudeDir\settings.local.json.template" -Force
+        Write-Success "settings.local.json.template copiado (referencia)"
+    }
+
+    # Copiar mcp-servers.json.template (como referencia)
+    $sourceMcpTemplate = Join-Path $sourceClaudeDir "mcp-servers.json.template"
+    if (Test-Path $sourceMcpTemplate) {
+        Copy-Item -Path $sourceMcpTemplate -Destination "$claudeDir\mcp-servers.json.template" -Force
+        Write-Success "mcp-servers.json.template copiado (referencia)"
+    }
+
+    # Copiar hooks
+    $sourceHooks = Join-Path $sourceClaudeDir "hooks"
+    if (Test-Path $sourceHooks) {
+        $destHooks = "$claudeDir\hooks"
+        if (-not (Test-Path $destHooks)) {
+            New-Item -ItemType Directory -Force -Path $destHooks | Out-Null
+        }
+        Copy-Item -Path "$sourceHooks\*" -Destination $destHooks -Recurse -Force
+        Write-Success "Claude hooks copiados (13 scripts)"
+    }
+
     # Copiar commands
     $sourceCommands = Join-Path $sourceClaudeDir "commands"
     if (Test-Path $sourceCommands) {
@@ -247,7 +300,7 @@ if (Test-Path $sourceClaudeDir) {
     $sourceSkills = Join-Path $sourceClaudeDir "skills"
     if (Test-Path $sourceSkills) {
         Copy-Item -Path $sourceSkills -Destination "$claudeDir\skills" -Recurse -Force
-        Write-Success "Claude skills copiadas"
+        Write-Success "Claude skills copiadas (27+)"
     }
 
     # Copiar songs
@@ -257,7 +310,7 @@ if (Test-Path $sourceClaudeDir) {
         Write-Success "Claude songs copiados"
     }
 } else {
-    Write-Warning "Pasta claude não encontrada em $sourceClaudeDir"
+    Write-Warning "Pasta claude nao encontrada em $sourceClaudeDir"
 }
 
 # ============================================
@@ -272,10 +325,10 @@ if (Test-Path $sourceTmux) {
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Tmux config copiado para WSL"
     } else {
-        Write-Warning "WSL não disponível ou erro ao copiar"
+        Write-Warning "WSL nao disponivel ou erro ao copiar"
     }
 } else {
-    Write-Warning "Arquivo .tmux.conf não encontrado"
+    Write-Warning "Arquivo .tmux.conf nao encontrado"
 }
 
 # ============================================
@@ -302,16 +355,16 @@ if (Test-Path $sourceScripts) {
 }
 
 # ============================================
-# 11. CONFIGURAR FONTE NO WINDOWS TERMINAL
+# 11. CONFIGURAR WINDOWS TERMINAL
 # ============================================
-Write-Step "Configurando fonte Maple Mono NF no Windows Terminal..."
+Write-Step "Configurando Windows Terminal..."
 
 $wtSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 
 if (Test-Path $wtSettingsPath) {
     $wtSettings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
 
-    # Configurar fonte padrão para todos os perfis
+    # Configurar defaults para todos os perfis
     if (-not $wtSettings.profiles.defaults) {
         $wtSettings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
     }
@@ -321,10 +374,23 @@ if (Test-Path $wtSettingsPath) {
         size = 12
     } -Force
 
+    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "useAtlasEngine" -NotePropertyValue $true -Force
+    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "padding" -NotePropertyValue "8" -Force
+    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "bellStyle" -NotePropertyValue "taskbar" -Force
+
+    # Configurar tema dark
+    $wtSettings | Add-Member -NotePropertyName "theme" -NotePropertyValue "dark" -Force
+
     $wtSettings | ConvertTo-Json -Depth 100 | Set-Content $wtSettingsPath -Encoding UTF8
-    Write-Success "Fonte Maple Mono NF configurada no Windows Terminal"
+    Write-Success "Windows Terminal configurado (Atlas engine, dark theme, padding, bell)"
 } else {
-    Write-Warning "Windows Terminal settings.json não encontrado"
+    Write-Warning "Windows Terminal settings.json nao encontrado"
+}
+
+# Copiar template de settings do terminal (referencia)
+$sourceTerminalSettings = Join-Path $scriptDir "terminal\settings.json"
+if (Test-Path $sourceTerminalSettings) {
+    Write-Success "Template de terminal settings disponivel em terminal\settings.json"
 }
 
 # ============================================
@@ -341,26 +407,52 @@ if ($claudeCmd) {
     claude mcp add context7 -- npx -y "@upstash/context7-mcp@latest" 2>&1 | Out-Null
     Write-Success " OK"
 
+    Write-Host "  Instalando DeepWiki MCP..." -NoNewline
+    claude mcp add deepwiki -- npx -y "@anthropic/deepwiki-mcp@latest" 2>&1 | Out-Null
+    Write-Success " OK"
+
     Write-Host "  Instalando Playwright MCP..." -NoNewline
     claude mcp add playwright -- npx "@playwright/mcp@latest" 2>&1 | Out-Null
     Write-Success " OK"
+
+    Write-Host "  Instalando Atlassian MCP..." -NoNewline
+    Write-Warning " Requer ATLASSIAN_EMAIL, ATLASSIAN_API_TOKEN e ATLASSIAN_SITE_URL"
+    Write-Host "    Configure via: claude mcp add atlassian -e ATLASSIAN_EMAIL=<email> -e ATLASSIAN_API_TOKEN=<token> -e ATLASSIAN_SITE_URL=<url> -- npx -y @anthropic/atlassian-mcp@latest"
 } else {
-    Write-Warning "Claude Code CLI não encontrado. Instale com: npm install -g @anthropic-ai/claude-code"
+    Write-Warning "Claude Code CLI nao encontrado. Instale com: npm install -g @anthropic-ai/claude-code"
 }
 
 # ============================================
-# FINALIZAÇÃO
+# 13. GIT MAINTENANCE
+# ============================================
+Write-Step "Configurando git maintenance..."
+
+$gitCmd = Get-Command git -ErrorAction SilentlyContinue
+if ($gitCmd) {
+    git maintenance start 2>&1 | Out-Null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "git maintenance ativado (prefetch, gc, commit-graph, loose-objects)"
+    } else {
+        Write-Warning "Erro ao ativar git maintenance"
+    }
+} else {
+    Write-Warning "Git nao encontrado no PATH"
+}
+
+# ============================================
+# FINALIZACAO
 # ============================================
 Write-Host @"
 
 ============================================
-  INSTALAÇÃO CONCLUÍDA!
+  INSTALACAO CONCLUIDA! (v2.0.0)
 ============================================
 
-Próximos passos:
+Proximos passos:
   1. Reinicie o terminal
-  2. Rode 'mise doctor' para verificar a instalação
-  3. Execute 'claude-workspace.bat' para abrir 4 painéis
+  2. Rode 'mise doctor' para verificar a instalacao
+  3. Execute 'claude-workspace.bat' para abrir 4 paineis
+  4. Configure Atlassian MCP com suas credenciais (ver acima)
 
 Ferramentas instaladas:
   - mise, starship, fzf, zoxide, xh
@@ -368,17 +460,27 @@ Ferramentas instaladas:
   - docker, gh, cargo
   - tailspin (tspin)
 
+Git configurado:
+  - .gitconfig (fsmonitor, rerere, rebase, zdiff3, aliases)
+  - .bashrc (GIT_OPTIONAL_LOCKS, aliases)
+  - git maintenance (prefetch, gc, commit-graph)
+
 Claude Code configurado:
-  - Settings, CLAUDE.md, commands, skills
-  - MCPs: Context7, Playwright
-  - Hook de notificação (som Duolingo)
-  - Scripts: claude-workspace.bat/.sh
+  - Settings, CLAUDE.md, hooks (13), skills (27+), commands (11)
+  - Templates: settings.local.json, mcp-servers.json
+  - MCPs: Context7, DeepWiki, Playwright (+Atlassian manual)
+  - Plugins: 12 habilitados
+  - Env: CLAUDE_CODE_NO_FLICKER, AGENT_TEAMS, MAX_MCP_OUTPUT_TOKENS
+
+Windows Terminal:
+  - Atlas engine, dark theme, padding, taskbar bell
+  - Fonte Maple Mono NF
 
 Tmux (WSL):
   - Config em ~/.tmux.conf
   - Script ~/claude-workspace.sh
 
-Fonte:
-  - Maple Mono NF configurada no Windows Terminal
+Starship:
+  - Config minimal (5 modulos: dir, git, node, go, python)
 
 "@ -ForegroundColor Green
