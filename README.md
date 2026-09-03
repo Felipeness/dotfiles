@@ -107,6 +107,9 @@ dotfiles/
 │       └── duolingo-correct.mp3
 ├── tmux/
 │   └── .tmux.conf
+├── dota/
+│   ├── README.md            # Onde restaurar
+│   └── gamestate_integration/  # GSI cfgs (Dota Plus, Overwolf, Logitech, analyzer)
 └── scripts/
     ├── claude-workspace.bat
     └── claude-workspace.sh
