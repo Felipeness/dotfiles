@@ -1,0 +1,16 @@
+"config"
+{
+	"bindings"
+	{
+		"\"		"<unbound>"
+		"SPACE"		"+dota_camera_follow"
+		"PAUSE"		"toggleconsole"
+		"7"		"chatwheel_say 57"
+		"b"		"dota_item_execute 5"
+		"c"		"incrementvar dota_camera_lock 0 1 1"
+		"HOME"		"disconnect"
+		"'"		"toggleconsole"
+		"APP"		"toggleconsole"
+		"/"		"toggleconsole"
+	}
+}
