@@ -11,6 +11,5 @@
 		"HOME"		"disconnect"
 		"'"		"toggleconsole"
 		"APP"		"toggleconsole"
-		"/"		"toggleconsole"
 	}
 }
