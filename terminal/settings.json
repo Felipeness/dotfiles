@@ -120,6 +120,14 @@
                 "hidden": false,
                 "name": "Developer PowerShell for VS 2022",
                 "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{6d1f2a4e-9b3c-4f0a-8e2d-5c7b1a9e0f31}",
+                "name": "Neovim",
+                "commandline": "nvim.exe",
+                "startingDirectory": "%USERPROFILE%",
+                "elevate": true,
+                "icon": "C:/Program Files/Neovim/bin/nvim.exe"
             }
         ]
     },
