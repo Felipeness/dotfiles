@@ -1,0 +1,44 @@
+{
+    "profiles": {
+        "defaults": {
+            "font": {
+                "face": "Maple Mono NF",
+                "size": 12
+            },
+            "historySize": 500000,
+            "useAtlasEngine": true,
+            "padding": "8",
+            "bellStyle": "taskbar",
+            "opacity": 85,
+            "useAcrylic": false,
+            "colorScheme": "Solarized Osaka Vivid"
+        }
+    },
+    "schemes": [
+        {
+            "name": "Solarized Osaka Vivid",
+            "background": "#031219",
+            "foreground": "#91a8aa",
+            "cursorColor": "#91a8aa",
+            "selectionBackground": "#002831",
+            "black": "#002831",
+            "red": "#f86265",
+            "green": "#94b109",
+            "yellow": "#d49a0a",
+            "blue": "#529ef9",
+            "purple": "#f8579a",
+            "cyan": "#32b9aa",
+            "white": "#f0ebdc",
+            "brightBlack": "#6e8b95",
+            "brightRed": "#fb5c41",
+            "brightGreen": "#6e8b95",
+            "brightYellow": "#7895a0",
+            "brightBlue": "#91a8aa",
+            "brightPurple": "#8987d3",
+            "brightCyan": "#9fb2b2",
+            "brightWhite": "#fdf7e7"
+        }
+    ],
+    "theme": "dark",
+    "useAcrylicInTabRow": true
+}

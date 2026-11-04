@@ -105,8 +105,14 @@ dotfiles/
 │   │   └── ... (20+ more)
 │   └── songs/
 │       └── duolingo-correct.mp3
+├── nvim/                    # LazyVim + solarized-osaka transparente (Windows e macOS)
+├── windows-terminal/
+│   └── settings.fragment.json  # Esquema Solarized Osaka Vivid + opacidade 85%
+├── ghostty/                 # Terminal do macOS com o mesmo visual
+│   ├── config
+│   └── themes/
 ├── tmux/
-│   └── .tmux.conf
+│   └── .tmux.conf           # Barra embaixo, cores solarized
 ├── dota/
 │   ├── README.md            # Onde restaurar
 │   ├── gamestate_integration/  # GSI cfgs (Dota Plus, Overwolf, Logitech, analyzer)
@@ -115,6 +121,31 @@ dotfiles/
     ├── claude-workspace.bat
     └── claude-workspace.sh
 ```
+
+## Neovim e terminal
+
+Neovim 0.12 + LazyVim, tema `solarized-osaka` (vivid, fundo transparente), oil.nvim, codediff.nvim, copilot.lua e claudecode.nvim. Visual inspirado no setup do craftzdog.
+
+**Windows**
+
+```powershell
+winget install Neovim.Neovim
+Copy-Item -Recurse $HOME\dotfiles\nvim $env:LOCALAPPDATA\nvim
+```
+
+No Windows Terminal, juntar `windows-terminal/settings.fragment.json` ao `settings.json` (esquema em `schemes`, o resto em `profiles.defaults`). Para o desfoque (`useAcrylic`), ligar Personalização > Cores > Efeitos de transparência.
+
+**macOS**
+
+```bash
+brew install neovim ghostty tmux lazygit ripgrep fd
+ln -s ~/dotfiles/nvim ~/.config/nvim
+ln -s ~/dotfiles/ghostty ~/.config/ghostty
+ln -s ~/dotfiles/tmux/.tmux.conf ~/.tmux.conf
+brew install --cask font-maple-mono-nf
+```
+
+Na primeira abertura do `nvim` o lazy.nvim instala tudo. Depois: `:Copilot auth`.
 
 ## Uso do Script
 
