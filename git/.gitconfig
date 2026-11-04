@@ -1,0 +1,51 @@
+[user]
+	name = Your Name
+	email = your.email@example.com
+[init]
+	defaultBranch = main
+[core]
+	longpaths = true
+	editor = code --wait
+	autocrlf = true
+	fsmonitor = true
+	untrackedcache = true
+	fscache = true
+[diff]
+	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff \"$LOCAL\" \"$REMOTE\"
+[merge]
+	tool = vscode
+	conflictstyle = zdiff3
+[mergetool "vscode"]
+	cmd = code --wait \"$MERGED\"
+[fetch]
+	prune = true
+	prunetags = true
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[rebase]
+	autosquash = true
+	autostash = true
+[rerere]
+	enabled = true
+[diff]
+	algorithm = histogram
+	colorMoved = default
+[branch]
+	sort = -committerdate
+[log]
+	date = iso-local
+[feature]
+	manyFiles = true
+[pack]
+	threads = 0
+[alias]
+	sw = switch
+	swc = switch -c
+	lg = log --oneline --graph --decorate -20
+	gone = "!git branch -vv | grep ': gone]' | awk '{print $1}'"
+	uncommit = reset --soft HEAD~1
+	fixup = commit --fixup

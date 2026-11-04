@@ -1,10 +1,8 @@
-# Starship Configuration
+# Starship Configuration — optimized (scan only used runtimes)
 # https://starship.rs/config/
 
-# Timeout para comandos
 command_timeout = 1000
 
-# Formato do prompt
 format = """
 $username\
 $hostname\
@@ -14,30 +12,26 @@ $git_status\
 $nodejs\
 $python\
 $golang\
-$rust\
 $docker_context\
 $kubernetes\
 $aws\
+$cmd_duration\
 $line_break\
 $character"""
 
-# Caractere do prompt
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
 
-# Diretório
 [directory]
 truncation_length = 3
 truncate_to_repo = true
 style = "bold cyan"
 
-# Git Branch
 [git_branch]
 symbol = " "
 style = "bold purple"
 
-# Git Status
 [git_status]
 style = "bold red"
 conflicted = "="
@@ -51,38 +45,41 @@ staged = "+${count}"
 renamed = "»${count}"
 deleted = "✘${count}"
 
-# Node.js
+# Runtime detection — only scan by marker files, not extensions
 [nodejs]
 symbol = " "
 style = "bold green"
+detect_extensions = []
+detect_files = ["package.json"]
+detect_folders = []
 
-# Python
 [python]
 symbol = " "
 style = "bold yellow"
+detect_extensions = []
+detect_files = ["pyproject.toml", "requirements.txt"]
+detect_folders = []
 
-# Go
 [golang]
 symbol = " "
 style = "bold cyan"
+detect_extensions = []
+detect_files = ["go.mod"]
+detect_folders = []
 
-# Rust
-[rust]
-symbol = " "
-style = "bold red"
-
-# Docker
 [docker_context]
 symbol = " "
 style = "bold blue"
 
-# Kubernetes
 [kubernetes]
 disabled = false
 symbol = "☸ "
 style = "bold blue"
 
-# AWS
 [aws]
 symbol = " "
 style = "bold orange"
+
+[cmd_duration]
+min_time = 2_000
+format = " [$duration]($style)"

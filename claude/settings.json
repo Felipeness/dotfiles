@@ -1,21 +1,292 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_NO_FLICKER": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5",
+    "MAX_MCP_OUTPUT_TOKENS": "100000"
+  },
   "includeCoAuthoredBy": false,
-  "alwaysThinkingEnabled": true,
-  "includeLineNumbers": true,
-  "autoSave": true,
-  "preferShorterResponses": false,
-  "includeFileContext": true,
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "Agent",
+      "mcp__claude-in-chrome",
+      "mcp__playwright",
+      "mcp__context7",
+      "mcp__deepwiki"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus",
   "hooks": {
-    "Notification": [
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/typecheck-after-edit.js",
+            "timeout": 10,
+            "statusMessage": "Typechecking..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/lint-after-edit.js",
+            "timeout": 10,
+            "statusMessage": "Linting..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/pipeline-gate.js",
+            "timeout": 10,
+            "statusMessage": "Checking pipeline gates..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/mirror-pr-reminder.js",
+            "timeout": 10,
+            "statusMessage": "Checking mirror PR..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/validate-pr-body.js",
+            "timeout": 10,
+            "statusMessage": "Validating PR body..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/guard-fork-dispatch.js",
+            "timeout": 5,
+            "statusMessage": "Checando roteamento de subagente..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/guard-skills-dispatch.js",
+            "timeout": 5,
+            "statusMessage": "Checando skills obrigatorias do brief..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/bash-pre-checks.js",
+            "timeout": 3,
+            "statusMessage": "Pre-bash checks..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/pre-pr-gate.js",
+            "if": "Bash(gh pr create*)",
+            "timeout": 180,
+            "statusMessage": "Rodando gate verificar-entrega..."
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/pipeline-precheck.js",
+            "timeout": 10,
+            "statusMessage": "Checking pipeline prerequisites..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/skills-gate.js"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/enforce-design-first.js",
+            "timeout": 10,
+            "statusMessage": "Checking design-first policy..."
+          },
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/skills-gate.js"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File $env:USERPROFILE\\.claude\\play-notification.ps1"
+            "command": "bash C:/Users/felip/.claude/hooks/cleanup-temp-files.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash C:/Users/felip/.claude/hooks/post-compact-context.sh",
+            "timeout": 10,
+            "statusMessage": "Re-injecting context..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/ralph-stop-hook.js",
+            "timeout": 10,
+            "statusMessage": "Checking Ralph Loop..."
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/task-completed-verify.js",
+            "timeout": 10,
+            "statusMessage": "Verifying completion..."
+          }
+        ]
+      }
+    ],
+    "TaskCreated": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/task-created-validate.js",
+            "timeout": 10,
+            "statusMessage": "Validating task..."
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/teammate-idle-check.js",
+            "timeout": 10,
+            "statusMessage": "Checking pending tasks..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node C:/Users/felip/.claude/hooks/skills-obrigatorias.js",
+            "timeout": 10
           }
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "C:/Users/felip/bin/claude-statusline.exe render"
+  },
+  "enabledPlugins": {
+    "claude-code-setup@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "playground@claude-plugins-official": false,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": false,
+    "superpowers@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true
+  },
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-sonnet-5": {
+      "effortLevel": "medium"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "medium"
+    },
+    "claude-opus-5": {
+      "effortLevel": "low"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
+    }
+  },
+  "autoDreamEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark-daltonized",
+  "switchModelsOnFlag": false,
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "autoSave": true,
+  "includeFileContext": true,
+  "includeLineNumbers": true,
+  "preferShorterResponses": false
 }

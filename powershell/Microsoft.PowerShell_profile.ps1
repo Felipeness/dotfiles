@@ -57,3 +57,57 @@ function gl { git log --oneline --graph --decorate -20 }
 
 # Docker ps formatado
 function dps { docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" }
+
+# ========================================
+# RTK (Rust Token Killer) toggle
+# ========================================
+# Uso: rtk-toggle on | off | status
+# Edita ~/.claude/settings.json substituindo o comando do hook PreToolUse.
+# - on  : "rtk hook claude" (filtragem ativa)
+# - off : "cmd /c exit 0"  (passthrough silencioso)
+function rtk-toggle {
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0)]
+        [ValidateSet('on','off','status','')]
+        [string]$Action = 'status'
+    )
+
+    $settingsPath = Join-Path $env:USERPROFILE '.claude\settings.json'
+    if (-not (Test-Path $settingsPath)) {
+        Write-Host "rtk: settings.json nao encontrado em $settingsPath" -ForegroundColor Red
+        return
+    }
+
+    $content  = Get-Content $settingsPath -Raw
+    $enabled  = $content -match '"command":\s*"rtk hook claude"'
+    $disabled = $content -match '"command":\s*"cmd /c exit 0"'
+
+    switch ($Action) {
+        'status' {
+            if     ($enabled)  { Write-Host "rtk: ON  (filtrando comandos)" -ForegroundColor Green }
+            elseif ($disabled) { Write-Host "rtk: OFF (passthrough)"        -ForegroundColor Yellow }
+            else { Write-Host "rtk: nao instalado (rode: rtk init -g --auto-patch)" -ForegroundColor Red }
+        }
+        'on' {
+            if ($enabled) { Write-Host "rtk: ja esta ON" -ForegroundColor Green; return }
+            if (-not $disabled) {
+                Write-Host "rtk: hook nao encontrado. Rode: rtk init -g --auto-patch" -ForegroundColor Red
+                return
+            }
+            $new = $content -replace '"command":\s*"cmd /c exit 0"', '"command": "rtk hook claude"'
+            Set-Content -Path $settingsPath -Value $new -NoNewline -Encoding UTF8
+            Write-Host "rtk: ON. Reinicie o Claude Code para aplicar." -ForegroundColor Green
+        }
+        'off' {
+            if ($disabled) { Write-Host "rtk: ja esta OFF" -ForegroundColor Yellow; return }
+            if (-not $enabled) {
+                Write-Host "rtk: hook nao encontrado em settings.json" -ForegroundColor Red
+                return
+            }
+            $new = $content -replace '"command":\s*"rtk hook claude"', '"command": "cmd /c exit 0"'
+            Set-Content -Path $settingsPath -Value $new -NoNewline -Encoding UTF8
+            Write-Host "rtk: OFF (passthrough). Reinicie o Claude Code para aplicar." -ForegroundColor Yellow
+        }
+    }
+}

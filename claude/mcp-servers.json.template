@@ -1,0 +1,50 @@
+{
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@upstash/context7-mcp@2.1.6"
+      ],
+      "env": {}
+    },
+    "deepwiki": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "mcp-deepwiki@0.0.10"
+      ],
+      "env": {}
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "@playwright/mcp@0.0.70"
+      ]
+    },
+    "atlassian": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@anthropic/mcp-server-atlassian"
+      ],
+      "env": {
+        "ATLASSIAN_SITE": "superlogica.atlassian.net",
+        "ATLASSIAN_USER_EMAIL": "your.email@company.com",
+        "ATLASSIAN_API_TOKEN": "YOUR_JIRA_API_TOKEN_HERE"
+      }
+    }
+  }
+}

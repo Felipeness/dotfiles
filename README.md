@@ -2,7 +2,7 @@
 
 Configuracoes e scripts para setup rapido de ambiente de desenvolvimento Windows.
 
-**Ultima atualizacao:** Abril 2026
+**Ultima atualizacao:** Novembro 2026
 
 ## Quick Start
 
@@ -79,22 +79,28 @@ dotfiles/
 │   ├── settings.local.json.template  # Permissions template
 │   ├── mcp-servers.json.template     # MCP server config template
 │   ├── CLAUDE.md            # Testing, caching, escape hatches, meta-rule
-│   ├── hooks/               # 13 hook scripts
-│   │   ├── pre-bash-guard.js         # Unified: dangerous commands + commit validation
-│   │   ├── validate-branch-name.js   # Branch naming convention
-│   │   ├── validate-pr-body.js       # PR body: Jira link + no defensive text
-│   │   ├── lint-after-edit.sh        # Auto-lint on file edit (Biome/ESLint)
-│   │   ├── aws-profile-check.js      # AWS profile warning
-│   │   ├── typecheck-after-edit.sh   # TS typecheck (incremental)
-│   │   ├── mirror-pr-reminder.js     # Mirror PR for dual-branch repos
-│   │   ├── ralph-stop-hook.js        # Ralph Loop management
-│   │   ├── teammate-idle-check.js    # Agent Teams idle check
-│   │   ├── task-created-validate.js  # Task creation validation
-│   │   ├── task-completed-verify.js  # Task completion verification
-│   │   ├── post-compact-context.sh   # Context re-injection after compact
-│   │   └── cleanup-temp-files.sh     # Session cleanup
+│   ├── hooks/               # 19 hook scripts
+│   │   ├── bash-pre-checks.js
+│   │   ├── cleanup-temp-files.sh
+│   │   ├── enforce-design-first.js
+│   │   ├── guard-fork-dispatch.js
+│   │   ├── guard-skills-dispatch.js
+│   │   ├── lint-after-edit.js
+│   │   ├── mirror-pr-reminder.js
+│   │   ├── pipeline-gate.js
+│   │   ├── pipeline-precheck.js
+│   │   ├── post-compact-context.sh
+│   │   ├── pre-pr-gate.js
+│   │   ├── ralph-stop-hook.js
+│   │   ├── skills-gate.js
+│   │   ├── skills-obrigatorias.js
+│   │   ├── task-completed-verify.js
+│   │   ├── task-created-validate.js
+│   │   ├── teammate-idle-check.js
+│   │   ├── typecheck-after-edit.js
+│   │   └── validate-pr-body.js
 │   ├── commands/             # 11 slash commands
-│   ├── skills/               # 27+ skills
+│   ├── skills/               # 38 skills
 │   │   ├── typescript/       # 452 lines (was 41)
 │   │   ├── react/            # 170 lines (was 36)
 │   │   ├── nestjs/           # 300 lines
@@ -170,7 +176,7 @@ Na primeira abertura do `nvim` o lazy.nvim instala tudo. Depois: `:Copilot auth`
 
 O instalador configura automaticamente o Claude Code com settings, hooks, skills, commands, MCPs e plugins.
 
-### Hooks (13)
+### Hooks (19)
 
 | Hook | Tipo | Descricao |
 |------|------|-----------|

@@ -1,0 +1,194 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions": [
+        {
+            "command": {
+                "action": "sendInput",
+                "input": "\n"
+            },
+            "id": "User.newline"
+        },
+        {
+            "command": {
+                "action": "copy",
+                "singleLine": false
+            },
+            "id": "User.copy.644BA8F2"
+        },
+        {
+            "command": "paste",
+            "id": "User.paste"
+        },
+        {
+            "command": "find",
+            "id": "User.find"
+        },
+        {
+            "command": {
+                "action": "splitPane",
+                "split": "auto",
+                "splitMode": "duplicate"
+            },
+            "id": "User.splitPane.A6751878"
+        }
+    ],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+    "keybindings": [
+        {
+            "id": "User.newline",
+            "keys": "shift+enter"
+        },
+        {
+            "id": "User.copy.644BA8F2",
+            "keys": "ctrl+c"
+        },
+        {
+            "id": "User.find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "id": "User.paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "id": "User.splitPane.A6751878",
+            "keys": "alt+shift+d"
+        }
+    ],
+    "newTabMenu": [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles": {
+        "defaults": {
+            "font": {
+                "face": "Maple Mono NF",
+                "size": 12
+            },
+            "historySize": 500000,
+            "useAtlasEngine": true,
+            "padding": "8",
+            "bellStyle": "taskbar",
+            "opacity": 85,
+            "useAcrylic": false,
+            "colorScheme": "Solarized Osaka Vivid",
+            "elevate": true
+        },
+        "list": [
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Prompt de comando"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore"
+            },
+            {
+                "guid": "{9a3b0365-7cad-5410-a508-d1e2051025cf}",
+                "hidden": false,
+                "name": "Ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{db34e1e5-ae12-5c55-87bc-c1ee7b076593}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{3895225a-8c18-53a0-9d62-1407cfee8909}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2022",
+                "source": "Windows.Terminal.VisualStudio"
+            }
+        ]
+    },
+    "schemes": [
+        {
+            "name": "Catppuccin Mocha",
+            "cursorColor": "#F5E0DC",
+            "selectionBackground": "#585B70",
+            "background": "#0E0E12",
+            "foreground": "#CDD6F4",
+            "black": "#45475A",
+            "red": "#F38BA8",
+            "green": "#A6E3A1",
+            "yellow": "#F9E2AF",
+            "blue": "#89B4FA",
+            "purple": "#F5C2E7",
+            "cyan": "#94E2D5",
+            "white": "#BAC2DE",
+            "brightBlack": "#585B70",
+            "brightRed": "#F38BA8",
+            "brightGreen": "#A6E3A1",
+            "brightYellow": "#F9E2AF",
+            "brightBlue": "#89B4FA",
+            "brightPurple": "#F5C2E7",
+            "brightCyan": "#94E2D5",
+            "brightWhite": "#A6ADC8"
+        },
+        {
+            "name": "Solarized Osaka Vivid",
+            "background": "#031219",
+            "foreground": "#91a8aa",
+            "cursorColor": "#91a8aa",
+            "selectionBackground": "#002831",
+            "black": "#002831",
+            "red": "#f86265",
+            "green": "#94b109",
+            "yellow": "#d49a0a",
+            "blue": "#529ef9",
+            "purple": "#f8579a",
+            "cyan": "#32b9aa",
+            "white": "#f0ebdc",
+            "brightBlack": "#6e8b95",
+            "brightRed": "#fb5c41",
+            "brightGreen": "#6e8b95",
+            "brightYellow": "#7895a0",
+            "brightBlue": "#91a8aa",
+            "brightPurple": "#8987d3",
+            "brightCyan": "#9fb2b2",
+            "brightWhite": "#fdf7e7"
+        }
+    ],
+    "theme": "osaka",
+    "themes": [
+        {
+            "name": "osaka",
+            "window": {
+                "applicationTheme": "dark",
+                "useMica": false
+            },
+            "tabRow": {
+                "background": "terminalBackground",
+                "unfocusedBackground": "terminalBackground"
+            },
+            "tab": {
+                "background": "terminalBackground",
+                "unfocusedBackground": "#00000000",
+                "showCloseButton": "hover"
+            }
+        }
+    ],
+    "useAcrylicInTabRow": false
+}
