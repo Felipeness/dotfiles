@@ -364,25 +364,17 @@ $wtSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d
 if (Test-Path $wtSettingsPath) {
     $wtSettings = Get-Content $wtSettingsPath -Raw | ConvertFrom-Json
 
-    # Configurar defaults para todos os perfis
-    if (-not $wtSettings.profiles.defaults) {
-        $wtSettings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue @{} -Force
+    # Mescla windows-terminal\settings.fragment.json: tema osaka, esquema solarized,
+    # opacidade, elevate (sempre admin) e perfil Neovim
+    $fragment = Get-Content (Join-Path $scriptDir "windows-terminal\settings.fragment.json") -Raw | ConvertFrom-Json
+    foreach ($key in "theme", "useAcrylicInTabRow", "themes", "schemes") {
+        $wtSettings | Add-Member -NotePropertyName $key -NotePropertyValue $fragment.$key -Force
     }
-
-    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "font" -NotePropertyValue @{
-        face = "Maple Mono NF"
-        size = 12
-    } -Force
-
-    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "useAtlasEngine" -NotePropertyValue $true -Force
-    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "padding" -NotePropertyValue "8" -Force
-    $wtSettings.profiles.defaults | Add-Member -NotePropertyName "bellStyle" -NotePropertyValue "taskbar" -Force
-
-    # Configurar tema dark
-    $wtSettings | Add-Member -NotePropertyName "theme" -NotePropertyValue "dark" -Force
+    $wtSettings.profiles | Add-Member -NotePropertyName "defaults" -NotePropertyValue $fragment.profiles.defaults -Force
+    $wtSettings.profiles.list = @($wtSettings.profiles.list | Where-Object { $_.name -ne "Neovim" }) + $fragment.profiles.list
 
     $wtSettings | ConvertTo-Json -Depth 100 | Set-Content $wtSettingsPath -Encoding UTF8
-    Write-Success "Windows Terminal configurado (Atlas engine, dark theme, padding, bell)"
+    Write-Success "Windows Terminal configurado (osaka, transparencia, admin, perfil Neovim)"
 } else {
     Write-Warning "Windows Terminal settings.json nao encontrado"
 }
@@ -391,6 +383,18 @@ if (Test-Path $wtSettingsPath) {
 $sourceTerminalSettings = Join-Path $scriptDir "terminal\settings.json"
 if (Test-Path $sourceTerminalSettings) {
     Write-Success "Template de terminal settings disponivel em terminal\settings.json"
+}
+
+# Atalhos Ctrl+Alt+T (terminal) e Ctrl+Alt+N (Neovim)
+& (Join-Path $scriptDir "scripts\hotkeys.ps1")
+
+# Config do Neovim
+$sourceNvim = Join-Path $scriptDir "nvim"
+if (Test-Path $sourceNvim) {
+    $destNvim = Join-Path $env:LOCALAPPDATA "nvim"
+    New-Item -ItemType Directory -Path $destNvim -Force | Out-Null
+    Copy-Item -Path "$sourceNvim\*" -Destination $destNvim -Recurse -Force
+    Write-Success "Neovim configurado em $destNvim"
 }
 
 # ============================================
@@ -473,7 +477,8 @@ Claude Code configurado:
   - Env: CLAUDE_CODE_NO_FLICKER, AGENT_TEAMS, MAX_MCP_OUTPUT_TOKENS
 
 Windows Terminal:
-  - Atlas engine, dark theme, padding, taskbar bell
+  - Tema osaka + Solarized Osaka Vivid, 85% opacidade, sempre admin
+  - Perfil Neovim, Ctrl+Alt+T (terminal) e Ctrl+Alt+N (Neovim)
   - Fonte Maple Mono NF
 
 Tmux (WSL):

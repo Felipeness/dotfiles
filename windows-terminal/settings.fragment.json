@@ -1,19 +1,24 @@
 {
-    "profiles": {
-        "defaults": {
-            "font": {
-                "face": "Maple Mono NF",
-                "size": 12
+    "theme": "osaka",
+    "useAcrylicInTabRow": false,
+    "themes": [
+        {
+            "name": "osaka",
+            "window": {
+                "applicationTheme": "dark",
+                "useMica": false
             },
-            "historySize": 500000,
-            "useAtlasEngine": true,
-            "padding": "8",
-            "bellStyle": "taskbar",
-            "opacity": 85,
-            "useAcrylic": false,
-            "colorScheme": "Solarized Osaka Vivid"
+            "tabRow": {
+                "background": "terminalBackground",
+                "unfocusedBackground": "terminalBackground"
+            },
+            "tab": {
+                "background": "terminalBackground",
+                "unfocusedBackground": "#00000000",
+                "showCloseButton": "hover"
+            }
         }
-    },
+    ],
     "schemes": [
         {
             "name": "Solarized Osaka Vivid",
@@ -39,6 +44,30 @@
             "brightWhite": "#fdf7e7"
         }
     ],
-    "theme": "dark",
-    "useAcrylicInTabRow": true
+    "profiles": {
+        "defaults": {
+            "font": {
+                "face": "Maple Mono NF",
+                "size": 12
+            },
+            "historySize": 500000,
+            "useAtlasEngine": true,
+            "padding": "8",
+            "bellStyle": "taskbar",
+            "opacity": 85,
+            "useAcrylic": false,
+            "colorScheme": "Solarized Osaka Vivid",
+            "elevate": true
+        },
+        "list": [
+            {
+                "guid": "{6d1f2a4e-9b3c-4f0a-8e2d-5c7b1a9e0f31}",
+                "name": "Neovim",
+                "commandline": "nvim.exe",
+                "startingDirectory": "%USERPROFILE%",
+                "elevate": true,
+                "icon": "C:/Program Files/Neovim/bin/nvim.exe"
+            }
+        ]
+    }
 }

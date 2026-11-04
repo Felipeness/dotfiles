@@ -135,7 +135,14 @@ winget install Neovim.Neovim
 Copy-Item -Recurse $HOME\dotfiles\nvim $env:LOCALAPPDATA\nvim
 ```
 
-No Windows Terminal, juntar `windows-terminal/settings.fragment.json` ao `settings.json` (esquema em `schemes`, o resto em `profiles.defaults`). Para o desfoque (`useAcrylic`), ligar Personalização > Cores > Efeitos de transparência.
+O `install.ps1` já aplica tudo: mescla `windows-terminal/settings.fragment.json` no Windows Terminal (tema `osaka` sem a faixa cinza, Solarized Osaka Vivid, 85% de opacidade, sempre como admin, perfil Neovim), copia o `nvim/` e cria os atalhos globais com `scripts/hotkeys.ps1`:
+
+| Atalho | Abre |
+|---|---|
+| `Ctrl+Alt+T` | Windows Terminal (admin) |
+| `Ctrl+Alt+N` | Neovim no Windows Terminal (admin) |
+
+Para o desfoque (`useAcrylic`), ligar Personalização > Cores > Efeitos de transparência.
 
 **macOS**
 
