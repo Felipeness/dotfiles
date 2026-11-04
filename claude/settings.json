@@ -279,12 +279,10 @@
     }
   },
   "autoDreamEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
   "theme": "dark-daltonized",
   "switchModelsOnFlag": false,
   "remoteControlAtStartup": false,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
   "autoSave": true,
   "includeFileContext": true,
   "includeLineNumbers": true,

@@ -119,10 +119,6 @@ dotfiles/
 │   └── themes/
 ├── tmux/
 │   └── .tmux.conf           # Barra embaixo, cores solarized
-├── dota/
-│   ├── README.md            # Onde restaurar
-│   ├── gamestate_integration/  # GSI cfgs (Dota Plus, Overwolf, Logitech, analyzer)
-│   └── keybinds/            # Atalhos de tecla + settings (dotakeys, user_keys, user_convars)
 └── scripts/
     ├── claude-workspace.bat
     └── claude-workspace.sh
