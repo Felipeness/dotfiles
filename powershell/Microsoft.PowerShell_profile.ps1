@@ -5,6 +5,8 @@
 # Mise-en-place (gerenciador de versões)
 # ========================================
 if (Get-Command mise -ErrorAction SilentlyContinue) {
+    # no Windows PowerShell 5.1 o mise avisa a cada abertura que o chpwd exige PS7
+    $env:MISE_PWSH_CHPWD_WARNING = '0'
     mise activate pwsh | Out-String | Invoke-Expression
 }
 
@@ -34,7 +36,8 @@ if (Get-Command fzf -ErrorAction SilentlyContinue) {
 # ========================================
 Set-Alias -Name g -Value git
 Set-Alias -Name k -Value kubectl
-Set-Alias -Name h -Value helm
+# 'h' ja nasce como alias AllScope (Get-History); sem -Option AllScope o Set-Alias falha
+Set-Alias -Name h -Value helm -Option AllScope -Force
 Set-Alias -Name d -Value docker
 
 # Alias para xh (http client)
